@@ -1,14 +1,15 @@
 /**
- * Sensor Data Service
+ * Sensor Data Service - StrideSense Prosthetics
  * 
  * This module handles sensor data fetching and generation.
  * Currently uses dummy data generation for MVP.
  * 
- * INTEGRATION POINT FOR ESP32:
+ * INTEGRATION POINT FOR ESP32 (WiFi Connection):
  * When backend is ready, replace generateDummyReading() calls with:
- * - GET /api/sensor/latest → Real-time sensor data
- * - WebSocket connection for streaming data
+ * - GET /api/sensor/latest → Real-time sensor data via WiFi
+ * - WebSocket connection for streaming data over WiFi
  * 
+ * ESP32 will connect via WiFi to send sensor data to the backend.
  * The SensorReading interface is designed to match expected ESP32 output.
  */
 
@@ -26,14 +27,11 @@ function generateDummyPressure(): PressureData {
   
   // Heel strike at beginning of cycle
   const heelBase = cyclePhase < 0.3 ? 250 - (cyclePhase * 500) : 50;
-  // Midfoot during mid-stance
-  const midfootBase = cyclePhase > 0.2 && cyclePhase < 0.6 ? 180 : 40;
   // Forefoot during push-off
   const forefootBase = cyclePhase > 0.4 && cyclePhase < 0.8 ? 220 : 30;
   
   return {
     heel: Math.max(0, heelBase + (Math.random() - 0.5) * 60),
-    midfoot: Math.max(0, midfootBase + (Math.random() - 0.5) * 40),
     forefoot: Math.max(0, forefootBase + (Math.random() - 0.5) * 50),
   };
 }
@@ -66,7 +64,10 @@ export function generateDummyReading(): SensorReading {
 }
 
 /**
- * FUTURE ESP32 INTEGRATION:
+ * FUTURE ESP32 WIFI INTEGRATION:
+ * 
+ * ESP32 connects via WiFi and sends sensor data to the backend.
+ * The backend then exposes the data via REST API or WebSocket.
  * 
  * export async function fetchLatestReading(): Promise<SensorReading> {
  *   const response = await fetch('/api/sensor/latest');
@@ -75,7 +76,7 @@ export function generateDummyReading(): SensorReading {
  * }
  * 
  * export function createSensorStream(onData: (reading: SensorReading) => void): WebSocket {
- *   const ws = new WebSocket('ws://your-esp32-backend/sensor/stream');
+ *   const ws = new WebSocket('ws://your-backend/sensor/stream');
  *   ws.onmessage = (event) => onData(JSON.parse(event.data));
  *   return ws;
  * }

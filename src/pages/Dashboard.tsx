@@ -119,17 +119,10 @@ export default function Dashboard() {
         </Card>
 
         {/* Sensor Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-6">
           <SensorCard
             title="Heel Pressure"
             value={currentReading?.pressure.heel ?? 0}
-            unit="kPa"
-            type="pressure"
-            icon={<Gauge className="h-4 w-4" />}
-          />
-          <SensorCard
-            title="Midfoot Pressure"
-            value={currentReading?.pressure.midfoot ?? 0}
             unit="kPa"
             type="pressure"
             icon={<Gauge className="h-4 w-4" />}
@@ -169,9 +162,9 @@ export default function Dashboard() {
           <CardHeader>
             <CardTitle className="text-muted-foreground text-sm">Integration Status</CardTitle>
             <CardDescription>
-              Currently displaying simulated data. ESP32 sensor integration pending.
+              Currently displaying simulated data. ESP32 WiFi sensor integration pending.
               <br />
-              <span className="font-mono text-xs">API Endpoint: GET /api/sensor/latest</span>
+              <span className="font-mono text-xs">API Endpoint: GET /api/sensor/latest (via WiFi)</span>
             </CardDescription>
           </CardHeader>
         </Card>

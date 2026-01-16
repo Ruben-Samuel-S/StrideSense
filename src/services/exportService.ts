@@ -1,5 +1,5 @@
 /**
- * Export Service
+ * Export Service - StrideSense Prosthetics
  * 
  * Handles data export functionality.
  * CSV export is fully implemented.
@@ -19,7 +19,6 @@ export function exportToCSV(readings: SensorReading[], filename?: string): void 
     'Timestamp',
     'DateTime',
     'Heel Pressure (kPa)',
-    'Midfoot Pressure (kPa)',
     'Forefoot Pressure (kPa)',
     'Pitch (°)',
     'Roll (°)',
@@ -31,7 +30,6 @@ export function exportToCSV(readings: SensorReading[], filename?: string): void 
     reading.timestamp,
     new Date(reading.timestamp).toISOString(),
     reading.pressure.heel.toFixed(2),
-    reading.pressure.midfoot.toFixed(2),
     reading.pressure.forefoot.toFixed(2),
     reading.orientation.pitch.toFixed(2),
     reading.orientation.roll.toFixed(2),
@@ -50,7 +48,7 @@ export function exportToCSV(readings: SensorReading[], filename?: string): void 
   const link = document.createElement('a');
   
   link.setAttribute('href', url);
-  link.setAttribute('download', filename || `prostep_session_${Date.now()}.csv`);
+  link.setAttribute('download', filename || `stridesense_session_${Date.now()}.csv`);
   link.style.visibility = 'hidden';
   
   document.body.appendChild(link);
