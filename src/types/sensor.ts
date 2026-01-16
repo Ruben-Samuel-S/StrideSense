@@ -1,9 +1,8 @@
-// Sensor data types for ProStep Monitor
-// These types are designed for future ESP32 integration
+// Sensor data types for StrideSense Prosthetics
+// These types are designed for future ESP32 WiFi integration
 
 export interface PressureData {
   heel: number;      // kPa
-  midfoot: number;   // kPa
   forefoot: number;  // kPa
 }
 

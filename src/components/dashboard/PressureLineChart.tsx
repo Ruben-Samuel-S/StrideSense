@@ -11,7 +11,6 @@ export function PressureLineChart({ readings, className }: PressureLineChartProp
   const chartData = readings.map((reading, index) => ({
     time: index * 0.5, // seconds
     heel: reading.pressure.heel,
-    midfoot: reading.pressure.midfoot,
     forefoot: reading.pressure.forefoot,
   }));
 
@@ -60,14 +59,6 @@ export function PressureLineChart({ readings, className }: PressureLineChartProp
                   strokeWidth={2}
                   dot={false}
                   name="Heel"
-                />
-                <Line 
-                  type="monotone" 
-                  dataKey="midfoot" 
-                  stroke="hsl(var(--chart-2))" 
-                  strokeWidth={2}
-                  dot={false}
-                  name="Midfoot"
                 />
                 <Line 
                   type="monotone" 

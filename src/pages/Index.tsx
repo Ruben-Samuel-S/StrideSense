@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Activity, BarChart3, Gauge, Footprints, Download, Shield } from 'lucide-react';
+import { BarChart3, Gauge, Footprints, Download, Shield } from 'lucide-react';
+import logo from '@/assets/logo.png';
 
 export default function Index() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -19,7 +20,7 @@ export default function Index() {
     {
       icon: Gauge,
       title: 'Real-Time Pressure',
-      description: 'Monitor heel, midfoot, and forefoot pressure in real-time',
+      description: 'Monitor heel and forefoot pressure in real-time',
     },
     {
       icon: Footprints,
@@ -46,12 +47,10 @@ export default function Index() {
         <div className="container relative py-24 lg:py-32">
           <div className="max-w-3xl mx-auto text-center">
             <div className="flex justify-center mb-6">
-              <div className="p-4 rounded-full bg-primary/10 border border-primary/20">
-                <Activity className="h-12 w-12 text-primary" />
-              </div>
+              <img src={logo} alt="StrideSense" className="h-24 w-24" />
             </div>
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-              ProStep <span className="text-primary">Monitor</span>
+              StrideSense <span className="text-primary">Prosthetics</span>
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
               Real-time prosthetic limb pressure and gait monitoring system. 
@@ -93,8 +92,8 @@ export default function Index() {
       {/* Footer */}
       <footer className="border-t py-8">
         <div className="container text-center text-sm text-muted-foreground">
-          <p>ProStep Monitor — Prosthetic Limb Monitoring System</p>
-          <p className="mt-1">MVP Version • ESP32 Integration Pending</p>
+          <p>StrideSense Prosthetics — Prosthetic Limb Monitoring System</p>
+          <p className="mt-1">MVP Version • ESP32 WiFi Integration Pending</p>
         </div>
       </footer>
     </div>

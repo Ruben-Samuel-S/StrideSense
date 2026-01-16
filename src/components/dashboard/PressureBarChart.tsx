@@ -10,7 +10,6 @@ interface PressureBarChartProps {
 export function PressureBarChart({ pressure, className }: PressureBarChartProps) {
   const chartData = pressure ? [
     { name: 'Heel', value: pressure.heel, level: getPressureLevel(pressure.heel) },
-    { name: 'Midfoot', value: pressure.midfoot, level: getPressureLevel(pressure.midfoot) },
     { name: 'Forefoot', value: pressure.forefoot, level: getPressureLevel(pressure.forefoot) },
   ] : [];
 
