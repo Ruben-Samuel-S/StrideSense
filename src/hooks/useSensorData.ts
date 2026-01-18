@@ -1,14 +1,14 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { SensorReading } from '@/types/sensor';
 import { 
-  generateDummyReading, 
+  fetchLatestReading,
   startSession, 
   recordReading, 
   getSessionData,
   endSession 
 } from '@/services/sensorDataService';
 
-const UPDATE_INTERVAL = 500; // ms - updates every 500ms
+const UPDATE_INTERVAL = 500; // ms - fetch every 500ms
 const MAX_READINGS_DISPLAY = 60; // Keep last 60 readings for charts (30 seconds)
 
 export interface COPData {
@@ -29,7 +29,6 @@ export function useSensorData() {
     startSession();
     setIsRecording(true);
     setReadings([]);
-    // Reset peak values for new session
     setPeakHeel(0);
     setPeakForefoot(0);
     setCopHistory([]);
@@ -51,26 +50,28 @@ export function useSensorData() {
 
   useEffect(() => {
     if (isRecording) {
-      intervalRef.current = setInterval(() => {
-        const reading = generateDummyReading();
-        recordReading(reading);
-        setCurrentReading(reading);
+      intervalRef.current = setInterval(async () => {
+        const reading = await fetchLatestReading();
         
-        // Update peak pressures
-        setPeakHeel(prev => Math.max(prev, reading.pressure.heel));
-        setPeakForefoot(prev => Math.max(prev, reading.pressure.forefoot));
-        
-        // Update COP history
-        setCopHistory(prev => {
-          const updated = [...prev, { position: reading.cop, timestamp: reading.timestamp }];
-          return updated.slice(-MAX_READINGS_DISPLAY);
-        });
-        
-        setReadings(prev => {
-          const updated = [...prev, reading];
-          // Keep only the last MAX_READINGS_DISPLAY readings for chart display
-          return updated.slice(-MAX_READINGS_DISPLAY);
-        });
+        if (reading) {
+          recordReading(reading);
+          setCurrentReading(reading);
+          
+          // Update peak pressures
+          setPeakHeel(prev => Math.max(prev, reading.pressure.heel));
+          setPeakForefoot(prev => Math.max(prev, reading.pressure.forefoot));
+          
+          // Update COP history
+          setCopHistory(prev => {
+            const updated = [...prev, { position: reading.cop, timestamp: reading.timestamp }];
+            return updated.slice(-MAX_READINGS_DISPLAY);
+          });
+          
+          setReadings(prev => {
+            const updated = [...prev, reading];
+            return updated.slice(-MAX_READINGS_DISPLAY);
+          });
+        }
       }, UPDATE_INTERVAL);
     }
 

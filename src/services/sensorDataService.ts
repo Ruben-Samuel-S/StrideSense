@@ -1,105 +1,84 @@
 /**
  * Sensor Data Service - StrideSense Prosthetics
  * 
- * This module handles sensor data fetching and generation.
- * Currently uses dummy data generation for MVP.
- * 
- * INTEGRATION POINT FOR ESP32 (WiFi Connection):
- * When backend is ready, replace generateDummyReading() calls with:
- * - GET /api/sensor/latest → Real-time sensor data via WiFi
- * - WebSocket connection for streaming data over WiFi
- * 
- * ESP32 will connect via WiFi to send sensor data to the backend.
- * The SensorReading interface is designed to match expected ESP32 output.
+ * This module fetches sensor data from the ESP32 Data Ingestion API.
+ * The ESP32 will POST data to the edge function, and the frontend fetches via GET.
  */
 
-import { SensorReading, PressureData, OrientationData, GaitPhase } from '@/types/sensor';
+import { SensorReading, GaitPhase } from '@/types/sensor';
+import { supabase } from '@/integrations/supabase/client';
 
-// Dummy data generation for MVP
-// This simulates realistic prosthetic limb sensor readings
-
-let gaitCycle = 0;
-const GAIT_CYCLE_LENGTH = 20; // readings per full gait cycle
-
-function generateDummyPressure(): PressureData {
-  // Simulate realistic pressure patterns during gait cycle
-  const cyclePhase = (gaitCycle % GAIT_CYCLE_LENGTH) / GAIT_CYCLE_LENGTH;
-  
-  // Heel strike at beginning of cycle
-  const heelBase = cyclePhase < 0.3 ? 250 - (cyclePhase * 500) : 50;
-  // Forefoot during push-off
-  const forefootBase = cyclePhase > 0.4 && cyclePhase < 0.8 ? 220 : 30;
-  
-  return {
-    heel: Math.max(0, heelBase + (Math.random() - 0.5) * 60),
-    forefoot: Math.max(0, forefootBase + (Math.random() - 0.5) * 50),
-  };
-}
-
-function generateDummyOrientation(): OrientationData {
-  const cyclePhase = (gaitCycle % GAIT_CYCLE_LENGTH) / GAIT_CYCLE_LENGTH;
-  
-  // Simulate foot orientation during gait
-  const pitch = Math.sin(cyclePhase * Math.PI * 2) * 15 + (Math.random() - 0.5) * 3;
-  const roll = Math.sin(cyclePhase * Math.PI * 2 + 0.5) * 5 + (Math.random() - 0.5) * 2;
-  
-  return { pitch, roll };
-}
-
-function generateDummyGaitPhase(): GaitPhase {
-  const cyclePhase = (gaitCycle % GAIT_CYCLE_LENGTH) / GAIT_CYCLE_LENGTH;
-  // Stance phase is roughly 60% of gait cycle
-  return cyclePhase < 0.6 ? 'stance' : 'swing';
+// API response type
+interface SensorAPIResponse {
+  id: number;
+  heel_pressure: number;
+  toe_pressure: number;
+  asymmetry_index: number;
+  cop: number;
+  gait_phase: string;
+  peak_heel_pressure: number;
+  peak_toe_pressure: number;
+  timestamp: string;
+  updated_at: string;
 }
 
 /**
- * Calculate Center of Pressure (COP) position
- * COP moves from heel (0mm) to toe (280mm) during gait
- * ESP32 INTEGRATION: This will be calculated on the device and sent via WiFi
+ * Fetch the latest sensor reading from the ESP32 Data Ingestion API
  */
-function calculateCOP(pressure: PressureData): number {
-  const FOOT_LENGTH = 280; // mm
-  const { heel, forefoot } = pressure;
-  const sum = heel + forefoot;
-  if (sum === 0) return FOOT_LENGTH / 2;
-  return (forefoot * FOOT_LENGTH) / sum;
-}
+export async function fetchLatestReading(): Promise<SensorReading | null> {
+  try {
+    const { data, error } = await supabase.functions.invoke<SensorAPIResponse>('sensor-data', {
+      method: 'GET',
+    });
 
-export function generateDummyReading(): SensorReading {
-  gaitCycle++;
-  
-  const pressure = generateDummyPressure();
-  const cop = calculateCOP(pressure);
-  
-  return {
-    timestamp: Date.now(),
-    pressure,
-    orientation: generateDummyOrientation(),
-    gaitPhase: generateDummyGaitPhase(),
-    cop,
-  };
+    if (error || !data) {
+      console.error('Error fetching sensor data:', error);
+      return null;
+    }
+
+    // Convert API response to SensorReading format
+    return {
+      timestamp: new Date(data.timestamp).getTime(),
+      pressure: {
+        heel: data.heel_pressure,
+        forefoot: data.toe_pressure,
+      },
+      orientation: {
+        pitch: 0, // Not included in API yet
+        roll: 0,  // Not included in API yet
+      },
+      gaitPhase: data.gait_phase as GaitPhase,
+      cop: data.cop,
+    };
+  } catch (err) {
+    console.error('Failed to fetch sensor data:', err);
+    return null;
+  }
 }
 
 /**
- * FUTURE ESP32 WIFI INTEGRATION:
- * 
- * ESP32 connects via WiFi and sends sensor data to the backend.
- * The backend then exposes the data via REST API or WebSocket.
- * 
- * export async function fetchLatestReading(): Promise<SensorReading> {
- *   const response = await fetch('/api/sensor/latest');
- *   if (!response.ok) throw new Error('Failed to fetch sensor data');
- *   return response.json();
- * }
- * 
- * export function createSensorStream(onData: (reading: SensorReading) => void): WebSocket {
- *   const ws = new WebSocket('ws://your-backend/sensor/stream');
- *   ws.onmessage = (event) => onData(JSON.parse(event.data));
- *   return ws;
- * }
+ * Get peak pressures from the latest API data
  */
+export async function fetchPeakPressures(): Promise<{ peakHeel: number; peakForefoot: number } | null> {
+  try {
+    const { data, error } = await supabase.functions.invoke<SensorAPIResponse>('sensor-data', {
+      method: 'GET',
+    });
 
-// Session management
+    if (error || !data) {
+      return null;
+    }
+
+    return {
+      peakHeel: data.peak_heel_pressure,
+      peakForefoot: data.peak_toe_pressure,
+    };
+  } catch {
+    return null;
+  }
+}
+
+// Session management (for recording history locally during active session)
 let currentSession: { id: string; readings: SensorReading[]; startTime: number } | null = null;
 
 export function startSession(): string {
@@ -109,7 +88,6 @@ export function startSession(): string {
     readings: [],
     startTime: Date.now(),
   };
-  gaitCycle = 0;
   return sessionId;
 }
 

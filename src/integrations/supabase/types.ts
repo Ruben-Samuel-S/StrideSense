@@ -14,7 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      sensor_data: {
+        Row: {
+          asymmetry_index: number
+          cop: number
+          gait_phase: string
+          heel_pressure: number
+          id: number
+          peak_heel_pressure: number
+          peak_toe_pressure: number
+          timestamp: string
+          toe_pressure: number
+          updated_at: string
+        }
+        Insert: {
+          asymmetry_index: number
+          cop: number
+          gait_phase: string
+          heel_pressure: number
+          id?: number
+          peak_heel_pressure: number
+          peak_toe_pressure: number
+          timestamp: string
+          toe_pressure: number
+          updated_at?: string
+        }
+        Update: {
+          asymmetry_index?: number
+          cop?: number
+          gait_phase?: string
+          heel_pressure?: number
+          id?: number
+          peak_heel_pressure?: number
+          peak_toe_pressure?: number
+          timestamp?: string
+          toe_pressure?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
