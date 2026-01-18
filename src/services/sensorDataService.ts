@@ -52,14 +52,31 @@ function generateDummyGaitPhase(): GaitPhase {
   return cyclePhase < 0.6 ? 'stance' : 'swing';
 }
 
+/**
+ * Calculate Center of Pressure (COP) position
+ * COP moves from heel (0mm) to toe (280mm) during gait
+ * ESP32 INTEGRATION: This will be calculated on the device and sent via WiFi
+ */
+function calculateCOP(pressure: PressureData): number {
+  const FOOT_LENGTH = 280; // mm
+  const { heel, forefoot } = pressure;
+  const sum = heel + forefoot;
+  if (sum === 0) return FOOT_LENGTH / 2;
+  return (forefoot * FOOT_LENGTH) / sum;
+}
+
 export function generateDummyReading(): SensorReading {
   gaitCycle++;
   
+  const pressure = generateDummyPressure();
+  const cop = calculateCOP(pressure);
+  
   return {
     timestamp: Date.now(),
-    pressure: generateDummyPressure(),
+    pressure,
     orientation: generateDummyOrientation(),
     gaitPhase: generateDummyGaitPhase(),
+    cop,
   };
 }
 
