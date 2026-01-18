@@ -5,9 +5,14 @@ import { SensorCard } from '@/components/dashboard/SensorCard';
 import { GaitPhaseIndicator } from '@/components/dashboard/GaitPhaseIndicator';
 import { PressureLineChart } from '@/components/dashboard/PressureLineChart';
 import { PressureBarChart } from '@/components/dashboard/PressureBarChart';
+import { AsymmetryIndexCard } from '@/components/dashboard/AsymmetryIndexCard';
+import { PeakPressureCard } from '@/components/dashboard/PeakPressureCard';
+import { COPLineChart } from '@/components/dashboard/COPLineChart';
+import { ClinicalInterpretationPanel } from '@/components/dashboard/ClinicalInterpretationPanel';
 import { useSensorData } from '@/hooks/useSensorData';
 import { exportToCSV, exportToPDF } from '@/services/exportService';
 import { useToast } from '@/hooks/use-toast';
+import { calculateAsymmetryIndex } from '@/types/sensor';
 import { Play, Square, Download, FileText, Gauge, RotateCcw } from 'lucide-react';
 
 export default function Dashboard() {
@@ -17,7 +22,10 @@ export default function Dashboard() {
     readings, 
     startRecording, 
     stopRecording,
-    getAllReadings 
+    getAllReadings,
+    peakHeel,
+    peakForefoot,
+    copHistory,
   } = useSensorData();
   const { toast } = useToast();
 
@@ -61,6 +69,11 @@ export default function Dashboard() {
       description: 'PDF export will be available in a future update',
     });
   };
+
+  // Calculate current asymmetry index for clinical panel
+  const currentAsymmetry = currentReading 
+    ? calculateAsymmetryIndex(currentReading.pressure.heel, currentReading.pressure.forefoot)
+    : 0;
 
   return (
     <div className="min-h-screen bg-background">
@@ -151,14 +164,42 @@ export default function Dashboard() {
           <GaitPhaseIndicator phase={currentReading?.gaitPhase ?? null} />
         </div>
 
-        {/* Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Clinical Metrics Row - NEW */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <AsymmetryIndexCard
+            heelPressure={currentReading?.pressure.heel ?? 0}
+            forefootPressure={currentReading?.pressure.forefoot ?? 0}
+          />
+          <PeakPressureCard
+            title="Peak Heel Pressure"
+            value={peakHeel}
+          />
+          <PeakPressureCard
+            title="Peak Toe Pressure"
+            value={peakForefoot}
+          />
+        </div>
+
+        {/* Pressure Charts */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           <PressureLineChart readings={readings} />
           <PressureBarChart pressure={currentReading?.pressure ?? null} />
         </div>
 
+        {/* COP Chart - NEW */}
+        <COPLineChart copHistory={copHistory} className="mb-6" />
+
+        {/* Clinical Interpretation Panel - NEW */}
+        <ClinicalInterpretationPanel
+          asymmetryIndex={currentAsymmetry}
+          peakHeel={peakHeel}
+          peakForefoot={peakForefoot}
+          copHistory={copHistory}
+          className="mb-6"
+        />
+
         {/* Integration Note */}
-        <Card className="mt-6 border-dashed">
+        <Card className="border-dashed">
           <CardHeader>
             <CardTitle className="text-muted-foreground text-sm">Integration Status</CardTitle>
             <CardDescription>
