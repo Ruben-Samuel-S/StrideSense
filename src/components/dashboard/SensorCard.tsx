@@ -22,6 +22,10 @@ export function SensorCard({
   const pressureLevel = type === 'pressure' ? getPressureLevel(value) : null;
   
   const getValueColor = () => {
+    if (type === 'orientation') {
+      // Show primary color when receiving live data (non-zero value)
+      return value !== 0 ? 'text-primary' : 'text-muted-foreground';
+    }
     if (type !== 'pressure') return 'text-foreground';
     switch (pressureLevel) {
       case 'normal': return 'text-accent-foreground';
@@ -32,6 +36,10 @@ export function SensorCard({
   };
 
   const getBorderColor = () => {
+    if (type === 'orientation') {
+      // Highlight border when receiving live IMU data
+      return value !== 0 ? 'border-primary/30' : 'border-border';
+    }
     if (type !== 'pressure') return 'border-border';
     switch (pressureLevel) {
       case 'normal': return 'border-accent-foreground/30';

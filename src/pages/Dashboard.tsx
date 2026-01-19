@@ -203,9 +203,9 @@ export default function Dashboard() {
           <CardHeader>
             <CardTitle className="text-muted-foreground text-sm">Integration Status</CardTitle>
             <CardDescription>
-              Currently displaying simulated data. ESP32 WiFi sensor integration pending.
+              Live ESP32 WiFi sensor connected.
               <br />
-              <span className="font-mono text-xs">API Endpoint: GET /api/sensor/latest (via WiFi)</span>
+              <span className="font-mono text-xs">API Endpoint: GET /sensor-data</span>
             </CardDescription>
           </CardHeader>
         </Card>
