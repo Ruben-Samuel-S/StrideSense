@@ -16,6 +16,8 @@ interface SensorAPIResponse {
   asymmetry_index: number;
   cop: number;
   gait_phase: string;
+  pitch: number;
+  roll: number;
   peak_heel_pressure: number;
   peak_toe_pressure: number;
   timestamp: string;
@@ -44,8 +46,8 @@ export async function fetchLatestReading(): Promise<SensorReading | null> {
         forefoot: data.toe_pressure,
       },
       orientation: {
-        pitch: 0, // Not included in API yet
-        roll: 0,  // Not included in API yet
+        pitch: data.pitch ?? 0,
+        roll: data.roll ?? 0,
       },
       gaitPhase: data.gait_phase as GaitPhase,
       cop: data.cop,
