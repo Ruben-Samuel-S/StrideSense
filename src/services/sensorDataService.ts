@@ -29,28 +29,36 @@ interface SensorAPIResponse {
  */
 export async function fetchLatestReading(): Promise<SensorReading | null> {
   try {
-    const { data, error } = await supabase.functions.invoke<SensorAPIResponse>('sensor-data', {
+    const { data, error } = await supabase.functions.invoke('sensor-data', {
       method: 'GET',
     });
 
-    if (error || !data) {
+    if (error) {
       console.error('Error fetching sensor data:', error);
+      return null;
+    }
+
+    // Handle nested response: payload may be in data.data or data directly
+    const sensor = (data?.data ?? data) as SensorAPIResponse;
+    
+    if (!sensor || !sensor.timestamp) {
+      console.error('No valid sensor data received:', data);
       return null;
     }
 
     // Convert API response to SensorReading format
     return {
-      timestamp: new Date(data.timestamp).getTime(),
+      timestamp: new Date(sensor.timestamp).getTime(),
       pressure: {
-        heel: data.heel_pressure,
-        forefoot: data.toe_pressure,
+        heel: sensor.heel_pressure,
+        forefoot: sensor.toe_pressure,
       },
       orientation: {
-        pitch: data.pitch ?? 0,
-        roll: data.roll ?? 0,
+        pitch: sensor.pitch ?? 0,
+        roll: sensor.roll ?? 0,
       },
-      gaitPhase: data.gait_phase as GaitPhase,
-      cop: data.cop,
+      gaitPhase: sensor.gait_phase as GaitPhase,
+      cop: sensor.cop,
     };
   } catch (err) {
     console.error('Failed to fetch sensor data:', err);
@@ -63,7 +71,7 @@ export async function fetchLatestReading(): Promise<SensorReading | null> {
  */
 export async function fetchPeakPressures(): Promise<{ peakHeel: number; peakForefoot: number } | null> {
   try {
-    const { data, error } = await supabase.functions.invoke<SensorAPIResponse>('sensor-data', {
+    const { data, error } = await supabase.functions.invoke('sensor-data', {
       method: 'GET',
     });
 
@@ -71,9 +79,16 @@ export async function fetchPeakPressures(): Promise<{ peakHeel: number; peakFore
       return null;
     }
 
+    // Handle nested response
+    const sensor = (data?.data ?? data) as SensorAPIResponse;
+    
+    if (!sensor) {
+      return null;
+    }
+
     return {
-      peakHeel: data.peak_heel_pressure,
-      peakForefoot: data.peak_toe_pressure,
+      peakHeel: sensor.peak_heel_pressure,
+      peakForefoot: sensor.peak_toe_pressure,
     };
   } catch {
     return null;
