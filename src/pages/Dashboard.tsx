@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Header } from '@/components/layout/Header';
 import { SensorCard } from '@/components/dashboard/SensorCard';
-import { GaitPhaseIndicator } from '@/components/dashboard/GaitPhaseIndicator';
+
 import { PressureLineChart } from '@/components/dashboard/PressureLineChart';
 import { PressureBarChart } from '@/components/dashboard/PressureBarChart';
 import { AsymmetryIndexCard } from '@/components/dashboard/AsymmetryIndexCard';
@@ -13,7 +13,7 @@ import { useSensorData } from '@/hooks/useSensorData';
 import { exportToCSV, exportToPDF } from '@/services/exportService';
 import { useToast } from '@/hooks/use-toast';
 import { calculateAsymmetryIndex } from '@/types/sensor';
-import { Play, Square, Download, FileText, Gauge, RotateCcw } from 'lucide-react';
+import { Play, Square, Download, FileText, Gauge } from 'lucide-react';
 
 export default function Dashboard() {
   const { 
@@ -132,7 +132,7 @@ export default function Dashboard() {
         </Card>
 
         {/* Sensor Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <SensorCard
             title="Heel Pressure"
             value={currentReading?.pressure.heel ?? 0}
@@ -147,21 +147,6 @@ export default function Dashboard() {
             type="pressure"
             icon={<Gauge className="h-4 w-4" />}
           />
-          <SensorCard
-            title="Pitch"
-            value={currentReading?.orientation.pitch ?? 0}
-            unit="°"
-            type="orientation"
-            icon={<RotateCcw className="h-4 w-4" />}
-          />
-          <SensorCard
-            title="Roll"
-            value={currentReading?.orientation.roll ?? 0}
-            unit="°"
-            type="orientation"
-            icon={<RotateCcw className="h-4 w-4" />}
-          />
-          <GaitPhaseIndicator phase={currentReading?.gaitPhase ?? null} />
         </div>
 
         {/* Clinical Metrics Row - NEW */}
