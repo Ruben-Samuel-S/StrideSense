@@ -7,8 +7,13 @@
  */
 
 import { SensorReading } from '@/types/sensor';
+import { GaitStabilityMetrics } from '@/hooks/useSensorData';
 
-export function exportToCSV(readings: SensorReading[], filename?: string): void {
+export function exportToCSV(
+  readings: SensorReading[], 
+  filename?: string,
+  gaitStability?: GaitStabilityMetrics
+): void {
   if (readings.length === 0) {
     console.warn('No data to export');
     return;
@@ -23,6 +28,7 @@ export function exportToCSV(readings: SensorReading[], filename?: string): void 
     'Pitch (°)',
     'Roll (°)',
     'Gait Phase',
+    'COP (mm)',
   ];
 
   // Create CSV rows
@@ -34,12 +40,19 @@ export function exportToCSV(readings: SensorReading[], filename?: string): void 
     reading.orientation.pitch.toFixed(2),
     reading.orientation.roll.toFixed(2),
     reading.gaitPhase,
+    reading.cop.toFixed(2),
   ]);
 
   // Combine headers and rows
   const csvContent = [
     headers.join(','),
     ...rows.map(row => row.join(',')),
+    '', // Empty row before summary
+    '--- Session Summary ---',
+    `Total Readings,${readings.length}`,
+    `Pitch Variation (°),${gaitStability?.pitchVariation?.toFixed(2) ?? 'N/A'}`,
+    `Roll Variation (°),${gaitStability?.rollVariation?.toFixed(2) ?? 'N/A'}`,
+    `Gait Stability Level,${gaitStability?.stabilityLevel ?? 'N/A'}`,
   ].join('\n');
 
   // Create and trigger download

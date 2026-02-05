@@ -2,7 +2,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Header } from '@/components/layout/Header';
 import { SensorCard } from '@/components/dashboard/SensorCard';
-
+import { OrientationCard } from '@/components/dashboard/OrientationCard';
+import { GaitStabilityCard } from '@/components/dashboard/GaitStabilityCard';
 import { PressureLineChart } from '@/components/dashboard/PressureLineChart';
 import { PressureBarChart } from '@/components/dashboard/PressureBarChart';
 import { AsymmetryIndexCard } from '@/components/dashboard/AsymmetryIndexCard';
@@ -26,6 +27,7 @@ export default function Dashboard() {
     peakHeel,
     peakForefoot,
     copHistory,
+    gaitStability,
   } = useSensorData();
   const { toast } = useToast();
 
@@ -55,7 +57,7 @@ export default function Dashboard() {
       });
       return;
     }
-    exportToCSV(allReadings);
+    exportToCSV(allReadings, undefined, gaitStability);
     toast({
       title: 'Export Complete',
       description: 'CSV file has been downloaded',
@@ -147,6 +149,29 @@ export default function Dashboard() {
             type="pressure"
             icon={<Gauge className="h-4 w-4" />}
           />
+        </div>
+
+        {/* IMU-Based Orientation & Gait Stability Section */}
+        <div className="mb-6">
+          <h2 className="text-lg font-semibold mb-3 flex items-center gap-2">
+            IMU-Based Orientation & Gait Stability
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <OrientationCard
+              title="Foot Pitch Angle"
+              value={currentReading?.orientation.pitch ?? 0}
+              type="pitch"
+            />
+            <OrientationCard
+              title="Foot Roll Angle"
+              value={currentReading?.orientation.roll ?? 0}
+              type="roll"
+            />
+            <GaitStabilityCard
+              pitchVariation={gaitStability.pitchVariation}
+              rollVariation={gaitStability.rollVariation}
+            />
+          </div>
         </div>
 
         {/* Clinical Metrics Row - NEW */}
