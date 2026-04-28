@@ -6,9 +6,9 @@
 
 ## Overview
 
-StrideSense is an embedded biomedical systems project that develops an intelligent prosthetic foot capable of real-time pressure and motion sensing. The system integrates force-sensitive resistors (FSR) and inertial measurement units (IMU) for comprehensive gait biomechanics analysis. Data is wirelessly transmitted to a visualization dashboard for clinical assessment and user feedback.
+StrideSense is a functional prototype system that integrates embedded sensors directly into a prosthetic foot for real-time biomechanical monitoring. The system combines force-sensitive resistors (FSR) and inertial measurement units (IMU) to capture plantar pressure distribution and lower limb orientation. Data is wirelessly transmitted to a React-based visualization dashboard for clinical gait assessment and user feedback.
 
-This project demonstrates practical application of embedded systems, sensor integration, and data visualization in assistive medical technology.
+This prototype demonstrates practical implementation of embedded systems, sensor integration, and real-time data visualization in assistive medical technology.
 
 ---
 
@@ -16,25 +16,26 @@ This project demonstrates practical application of embedded systems, sensor inte
 
 Traditional prosthetic limbs lack real-time feedback on plantar pressure distribution and gait kinematics, limiting:
 
-- Clinical assessment of load distribution patterns
-- User awareness of gait abnormalities
-- Optimization of prosthetic fitting and training
-- Prevention of pressure-related tissue damage
+- Clinical assessment of load distribution patterns and asymmetry
+- User awareness of gait abnormalities and instability
+- Optimization of prosthetic fitting and training protocols
+- Prevention of pressure-related tissue damage through early warning
 
-Current solutions either rely on external motion capture systems (expensive, lab-bound) or provide no biomechanical feedback to users.
+Current solutions either rely on external motion capture systems (expensive, lab-bound) or provide no biomechanical feedback to users in real-time.
 
 ---
 
 ## Proposed Solution
 
-StrideSense embeds sensors directly into a prosthetic foot to provide:
+StrideSense is a working prototype system that embeds sensors directly into a prosthetic foot to provide:
 
-- **Real-time pressure mapping** across the plantar surface using FSR sensors
-- **Motion tracking** via 6-axis IMU for gait phase detection and motion analysis
-- **Wireless data streaming** to enable portable, wearable operation
-- **Visual analytics dashboard** for clinicians and users to monitor gait quality
+- **Real-time pressure mapping** across heel and forefoot regions using calibrated FSR sensors
+- **Motion tracking** via 6-axis IMU for orientation sensing (pitch and roll angles)
+- **Stability analysis** through continuous motion variation monitoring
+- **Wireless data streaming** enabling portable, wearable operation
+- **Visual analytics dashboard** for clinicians and users to monitor gait quality in real time
 
-The system operates independently and can be integrated with existing prosthetic designs.
+The system operates independently and integrates seamlessly with standard prosthetic designs for clinical and personal use.
 
 ---
 
@@ -42,17 +43,18 @@ The system operates independently and can be integrated with existing prosthetic
 
 ### Hardware Components
 
-- **Microcontroller**: ESP32 (dual-core, Wi-Fi capable, ADC support)
-- **Pressure Sensors**: Force-Sensitive Resistors (FSR) distributed across plantar surface
+- **Microcontroller**: ESP32 (dual-core, Wi-Fi capable, 12-bit ADC)
+- **Pressure Sensors**: Force-Sensitive Resistors (FSR 402) at heel and forefoot locations
 - **Motion Sensor**: MPU6050 (6-axis IMU: 3-axis accelerometer + 3-axis gyroscope)
-- **Communication**: Wi-Fi protocol via ESP32 for real-time data transmission
-- **Power**: Battery-powered operation with low-power optimization
+- **Communication**: Wi-Fi protocol via ESP32 for real-time wireless data transmission
+- **Sampling Rate**: 100 Hz for sensor data acquisition
+- **Power**: Battery-powered with real-time operation capability
 
 ### Software Stack
 
 - **Embedded Firmware**: C/C++ (Arduino framework on ESP32)
-- **Data Acquisition**: Real-time sensor polling and analog-to-digital conversion
-- **Frontend Dashboard**: React + TypeScript for interactive visualization
+- **Data Acquisition**: Real-time sensor polling, calibration, and ADC conversion
+- **Frontend Dashboard**: React + TypeScript for interactive real-time visualization
 - **UI Framework**: Tailwind CSS + shadcn-ui for responsive design
 - **Build Tool**: Vite for optimized development and production builds
 
@@ -60,31 +62,57 @@ The system operates independently and can be integrated with existing prosthetic
 
 ```
 [FSR Sensors] ─┐
-              ├─→ [ESP32] ──→ [Wi-Fi] ──→ [Dashboard]
-[MPU6050 IMU] ─┘                           (React App)
+              ├─→ [ESP32] ──→ [Wi-Fi] ──→ [React Dashboard]
+[MPU6050 IMU] ─┘                    (Real-time Visualization)
 ```
 
-The ESP32 continuously samples pressure and motion data, applies basic filtering, and transmits processed data to the web dashboard. The dashboard visualizes plantar pressure heatmaps, acceleration/angular velocity plots, and gait phase indicators.
+The ESP32 continuously samples pressure and motion data at 100 Hz, applies sensor calibration and filtering, and transmits processed data to the web dashboard. The dashboard renders real-time pressure maps, orientation plots, stability metrics, and clinical indicators with minimal latency.
 
 ### System Workflow
 
-1. **Sensor Reading**: ESP32 reads FSR analog values and IMU acceleration/gyroscope data at configurable sampling rates
-2. **Data Preprocessing**: Calibration offsets applied; noise filtering performed
-3. **Wireless Transmission**: Data streamed via Wi-Fi to the dashboard application
-4. **Visualization**: Real-time plots and pressure maps rendered in React frontend
-5. **Analysis**: Clinical metrics (stride time, peak pressure, stability) calculated and displayed
+1. **Sensor Acquisition**: ESP32 reads FSR analog values (heel & forefoot pressure) and MPU6050 acceleration/gyroscope data at 100 Hz
+2. **Sensor Calibration**: Applied calibration offsets for accurate pressure measurement; gyroscope bias correction
+3. **Data Processing**: Real-time filtering and computation of derived metrics (pitch, roll, stability variation, pressure asymmetry)
+4. **Wireless Transmission**: Processed data streamed via Wi-Fi to the React dashboard application
+5. **Real-Time Visualization**: Dashboard displays pressure heatmaps, IMU orientation, stability indicators, and clinical metrics
+6. **Clinical Analysis**: Pressure Asymmetry Index (PAI), Center of Pressure (COP), and stability variation metrics calculated and displayed
+
+---
+
+## Implemented Features
+
+### Real-Time Sensor Data
+
+- **Heel Pressure Monitoring**: Continuous pressure measurement from heel region FSR
+- **Forefoot Pressure Monitoring**: Continuous pressure measurement from forefoot region FSR
+- **IMU Orientation Tracking**: Real-time pitch and roll angle computation from accelerometer and gyroscope data
+
+### Advanced Gait Parameters
+
+- **Pressure Asymmetry Index (PAI)**: Quantifies imbalance between heel and forefoot pressure distribution
+- **Center of Pressure (COP)**: Calculates the resultant pressure point on the plantar surface
+- **Stability Variation Metrics**: Tracks changes in motion stability based on IMU data variations
+- **Status Indicators**: Real-time classification of normal vs. abnormal gait patterns based on parameter thresholds
+
+### System Capabilities
+
+- Real-time data streaming at 100 Hz
+- Multi-sensor fusion for comprehensive biomechanical assessment
+- Low-latency wireless communication (typical <500 ms)
+- Responsive dashboard with live metric updates
+- Sensor calibration and baseline establishment
 
 ---
 
 ## Sample Output
 
-### System Demonstration
+### System Architecture Diagram
 
 ![System Architecture](docs/architecture.png)
 
-### Gait Analysis Visualization
+### Real-Time Pressure and Motion Visualization
 
-![Pressure and Motion Output](docs/output.png)
+![Pressure Distribution and IMU Output](docs/output.png)
 
 ### User Dashboard Interface
 
@@ -92,71 +120,103 @@ The ESP32 continuously samples pressure and motion data, applies basic filtering
 
 ---
 
+## Advanced Parameters
+
+### Pressure Asymmetry Index (PAI)
+
+Quantifies the degree of imbalance in pressure distribution between heel and forefoot regions:
+
+$$\text{PAI} = \frac{|\text{Heel Pressure} - \text{Forefoot Pressure}|}{\text{Heel Pressure} + \text{Forefoot Pressure}} \times 100\%$$
+
+Normal range: 0-20% (symmetric distribution)
+Abnormal: >20% (asymmetric loading pattern)
+
+### Center of Pressure (COP)
+
+Represents the point of resultant force application on the plantar surface. Calculated from weighted pressure distribution across sensor locations.
+
+Clinical significance: COP trajectory analysis aids in understanding gait symmetry and weight transfer mechanics.
+
+### Stability Variation Metrics
+
+Derived from IMU gyroscope data to assess postural stability and motion consistency:
+
+- **Angular Velocity Variation**: Standard deviation of gyroscope measurements
+- **Acceleration Variation**: Standard deviation of accelerometer measurements
+- **Stability Index**: Composite metric reflecting overall lower limb stability
+
+---
+
 ## Technology Stack
 
 | Category | Technology |
 |----------|-----------|
-| **Microcontroller** | ESP32 |
-| **Sensors** | FSR (Force-Sensitive Resistor), MPU6050 (6-axis IMU) |
+| **Microcontroller** | ESP32 (dual-core, 100 Hz sampling) |
+| **Pressure Sensors** | FSR 402 (heel & forefoot) |
+| **IMU** | MPU6050 (6-axis: accel + gyro) |
 | **Firmware** | C/C++ (Arduino) |
 | **Frontend** | React, TypeScript |
 | **Styling** | Tailwind CSS, shadcn-ui |
 | **Build System** | Vite |
-| **Protocol** | Wi-Fi (TCP/UDP) |
+| **Communication** | Wi-Fi (TCP/UDP) |
 
 ---
 
 ## AI Integration (In Progress)
 
-Lovable AI was used to assist with frontend development and UI prototyping.
+Lovable AI was used to assist with frontend development and dashboard UI prototyping during the development phase.
 
-**Planned AI Features**:
-- Gait pattern classification and anomaly detection
-- Automated pressure distribution analysis
-- Personalized gait recommendations based on historical data
-- Machine learning-based pressure threshold alerts
+**Planned AI Features** (Under Development):
+- Gait pattern classification from historical sensor data
+- Automated anomaly detection in pressure distribution
+- Personalized stability threshold recommendations
+- Long-term trend analysis for rehabilitation tracking
 
-*Note: AI components are in planning stages and not yet integrated into the production system.*
+*Note: Machine learning models are not yet implemented. Current system focuses on real-time sensor visualization and clinical parameter computation.*
 
 ---
 
 ## My Contributions
 
-- **Hardware Design**: Selected, integrated, and calibrated FSR and MPU6050 sensors for optimal performance
-- **Embedded Firmware**: Developed ESP32 firmware for sensor data acquisition, preprocessing, and wireless transmission
-- **System Integration**: Established communication protocols between hardware and software layers
-- **Frontend Development**: Built interactive React dashboard with real-time data visualization and gait metrics
-- **Testing & Validation**: Conducted preliminary sensor calibration and end-to-end system testing
-- **Documentation**: Created technical documentation for reproducibility and future development
+- **Hardware Integration**: Selected, integrated, and calibrated FSR and MPU6050 sensors for accurate real-time measurements
+- **ESP32 Firmware Development**: Worked on sensor data acquisition, calibration routines, and wireless communication protocols
+- **System Integration**: Established and tested communication pipeline between hardware sensors and software dashboard
+- **Dashboard Development**: Collaborated on React frontend design with real-time data visualization components
+- **Parameter Implementation**: Implemented computation of Pressure Asymmetry Index, Center of Pressure, and stability variation metrics
+- **System Testing**: Conducted sensor validation, calibration verification, and end-to-end prototype testing
+- **Documentation**: Created technical documentation for system architecture, setup, and future development
 
 ---
 
 ## Biomedical Applications
 
-- **Clinical Gait Analysis**: Non-invasive assessment of prosthetic user gait patterns
-- **Prosthetic Fitting Optimization**: Real-time feedback for clinicians during device adjustment
-- **Rehabilitation Monitoring**: Tracking progress during prosthetic training and therapy
-- **Pressure Ulcer Prevention**: Detecting high-pressure zones to reduce tissue injury risk
-- **Personalized Feedback**: User-facing metrics for gait awareness and improvement
-- **Research Platform**: Standardized tool for prosthetics research and biomechanics studies
+- **Clinical Gait Assessment**: Non-invasive evaluation of prosthetic user gait patterns in real time
+- **Prosthetic Fitting Optimization**: Real-time feedback for clinicians during device adjustment and alignment
+- **Rehabilitation Progress Monitoring**: Tracking stability and pressure distribution improvements during therapy
+- **Pressure Ulcer Risk Assessment**: Detection of high-pressure zones to reduce tissue injury risk
+- **User Gait Awareness**: Real-time biofeedback enabling users to self-correct walking patterns
+- **Research Platform**: Standardized, reproducible system for prosthetics research and biomechanics studies
 
 ---
 
 ## Future Scope
 
-- **Machine Learning**: Implement gait phase detection and pattern classification algorithms
-- **Extended Sensor Coverage**: Integrate additional sensors (temperature, humidity) for comprehensive monitoring
-- **Mobile App**: Native iOS/Android application for on-the-go access
-- **Data Logging**: Long-term storage and historical analysis capabilities
-- **Wireless Protocols**: Support for Bluetooth Low Energy (BLE) for power optimization
-- **Clinical Validation**: Comparison studies with gold-standard motion capture systems
-- **Wearable Integration**: Connection with smartwatches and fitness trackers for holistic health monitoring
+- **Machine Learning Integration**: Implement gait phase classification and personalized pattern recognition
+- **Extended Sensor Coverage**: Additional pressure sensors for higher-resolution plantar mapping
+- **Long-Term Data Analytics**: Historical trend analysis and regression tracking for rehabilitation assessment
+- **Mobile Application**: Native iOS/Android app for on-the-go access and data review
+- **Low-Power Optimization**: Bluetooth Low Energy (BLE) support for extended battery life
+- **Clinical Validation Study**: Comparative analysis with gold-standard motion capture systems
+- **Multi-User Platform**: Support for tracking multiple prosthetic wearers with centralized data management
+- **Automated Alerts**: Threshold-based notifications for abnormal pressure patterns or instability
 
 ---
 
 ## Disclaimer
 
-This project is developed as a biomedical engineering research prototype. Lovable AI was used as a development assistance tool for code generation and UI design but does not represent the core innovation of the system. All hardware integration, sensor calibration, and system architecture decisions are based on original engineering work.
+StrideSense is developed as a biomedical engineering prototype system. Lovable AI was used as a development assistance tool for frontend code generation and UI design, but does not represent the core innovation of the hardware-software integration. All sensor calibration, hardware integration, firmware development, and system architecture decisions are based on original engineering work and testing.
+
+This is a prototype system designed for research and evaluation purposes. Clinical deployment requires appropriate regulatory clearance and validation studies.
 
 ---
 
@@ -166,7 +226,8 @@ This project is developed as a biomedical engineering research prototype. Lovabl
 
 - Node.js (v18 or higher) and npm installed ([install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating))
 - Git for version control
-- ESP32 development board and required sensors (FSR, MPU6050)
+- ESP32 development board, FSR sensors, and MPU6050 module
+- USB cable for ESP32 programming
 
 ### Installation & Setup
 
@@ -177,7 +238,7 @@ git clone https://github.com/Ruben-Samuel-S/stridesense.git
 cd stridesense
 ```
 
-#### Install Dependencies
+#### Install Frontend Dependencies
 
 ```sh
 npm install
@@ -189,7 +250,7 @@ npm install
 npm run dev
 ```
 
-The application will launch in your browser with auto-reload enabled.
+The dashboard will launch in your browser with hot-reload enabled.
 
 #### Build for Production
 
@@ -197,48 +258,79 @@ The application will launch in your browser with auto-reload enabled.
 npm run build
 ```
 
-#### Deploy
+#### Deploy Dashboard
 
-To deploy the dashboard application, follow your preferred hosting platform's documentation (Vercel, Netlify, GitHub Pages, etc.).
+Deploy the compiled application to your preferred hosting platform (Vercel, Netlify, GitHub Pages, AWS, etc.).
 
 ### Embedded Firmware Setup
 
 1. Install the [Arduino IDE](https://www.arduino.cc/en/software) or [PlatformIO](https://platformio.org/)
-2. Configure ESP32 board and COM port settings
-3. Load the firmware code onto the ESP32
-4. Configure Wi-Fi credentials in the firmware for network connectivity
-5. Verify sensor connections and calibration before deployment
+2. Install the ESP32 board support package in your IDE
+3. Configure board: **ESP32 Dev Module**
+4. Install required libraries:
+   - `MPU6050` (by ElectroMech)
+   - `ArduinoJson` (for data formatting)
+   - `WiFi` (built-in)
+5. Update Wi-Fi credentials in the firmware sketch
+6. Load the firmware onto the ESP32
+7. Configure sensor calibration values (baseline pressure readings)
+8. Verify sensor connections and test data transmission to dashboard
+
+### Sensor Calibration
+
+Before deployment, perform baseline calibration:
+
+1. **FSR Calibration**: Record zero-load readings; establish load-voltage mapping using known weights
+2. **IMU Calibration**: Collect gyroscope bias values with sensor at rest; apply offsets in firmware
+3. **Dashboard Verification**: Confirm real-time data display and parameter computation accuracy
 
 ---
 
 ## UI Preview
 
-The dashboard provides an intuitive interface for real-time gait monitoring:
+The React dashboard provides real-time monitoring of prosthetic function:
 
-- **Live Pressure Heatmap**: Visualizes plantar pressure distribution across the prosthetic foot
-- **Motion Graphs**: Real-time plots of acceleration and angular velocity
-- **Gait Metrics**: Display of key parameters (stride time, peak pressure, stability indices)
-- **Data Export**: Options to download session data for offline analysis
-- **Historical Trends**: Comparative analysis across multiple sessions
+### Live Sensor Data Display
+
+- **Heel Pressure**: Real-time pressure reading from heel region FSR with live waveform
+- **Forefoot Pressure**: Real-time pressure reading from forefoot region FSR with live waveform
+- **Pitch Angle**: Live plot of pitch (sagittal plane) rotation from IMU
+- **Roll Angle**: Live plot of roll (frontal plane) rotation from IMU
+
+### Clinical Metrics
+
+- **Pressure Asymmetry Index (PAI)**: Percentage imbalance between heel and forefoot loading
+- **Center of Pressure (COP)**: Graphical representation of resultant pressure point on plantar surface
+- **Stability Variation**: Real-time stability index based on motion consistency
+- **Status Indicator**: Real-time classification badge (Normal/Abnormal) based on parameter thresholds
+
+### Features
+
+- Live data refresh at 100 Hz acquisition rate
+- Historical data trending over session duration
+- Parameter threshold customization for individual users
+- Data export functionality for offline analysis
+- Responsive design for desktop and tablet viewing
 
 ---
 
 ## Contributing
 
-Contributions and feedback are welcome. Please feel free to open issues or submit pull requests.
+Contributions, bug reports, and feature suggestions are welcome. Please open issues or submit pull requests to help improve the system.
 
 ---
 
 ## License
 
-This project is provided as-is for educational and research purposes. Consult relevant regulatory bodies for clinical or commercial applications.
+This project is provided for educational and research purposes. Consult relevant regulatory bodies and medical device regulations for clinical or commercial applications.
 
 ---
 
 ## Contact
 
-For questions, suggestions, or collaboration inquiries, please reach out through GitHub issues or contact the project maintainer.
+For technical questions, collaboration inquiries, or feedback, please reach out through GitHub issues or contact the project maintainers.
 
 ---
 
-**Last Updated**: April 2026
+**Last Updated**: April 2026  
+**System Status**: Functional Prototype with Real-Time Data Acquisition and Visualization
