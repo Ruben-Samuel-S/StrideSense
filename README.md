@@ -78,10 +78,6 @@ FSR + IMU → ESP32 → Wi-Fi → Supabase → React Dashboard → Visualization
 
 ## Sample Output
 
-### System Architecture Diagram
-
-![System Architecture](docs/architecture.png)
-
 ### Real-Time Pressure and Motion Visualization
 
 ![Pressure Distribution and IMU Output](docs/output.png)
@@ -135,7 +131,7 @@ Derived from IMU gyroscope data to assess postural stability and motion consiste
 
 ---
 
-## Mechanical Validation
+## Mechanical Validation & Testing
 
 The prosthetic foot structure was engineered using thermoplastic polyurethane (TPU) through 3D printing fabrication for precise sensor integration and structural reliability.
 
@@ -152,6 +148,7 @@ The prosthetic foot structure was engineered using thermoplastic polyurethane (T
 - **Safe Deformation**: Material exhibited controlled elastic deformation within acceptable limits
 - **Structural Integrity**: Post-test analysis confirmed maintenance of dimensional accuracy and sensor mounting stability
 - **Recovery Rate**: Complete material recovery to original shape after load removal
+- Link : [![Compression Test]](https://drive.google.com/file/d/1MsbJB7-RQVe4vxAYL-qSza_Um5krRSdc/view?usp=sharing)
 
 ### Design Advantages
 
