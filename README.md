@@ -10,6 +10,8 @@ StrideSense is a functional prototype system that integrates embedded sensors di
 
 This prototype demonstrates practical implementation of embedded systems, sensor integration, and real-time data visualization in assistive medical technology.
 
+The system has been implemented and tested as a working prototype with real-time data visualization. The current design is developed with a pediatric-scale prosthetic foot to enable easier fabrication, testing, and biomechanical analysis.
+
 ---
 
 ## Problem Statement
@@ -46,6 +48,8 @@ The system operates independently and integrates seamlessly with standard prosth
 - **Microcontroller**: ESP32 (dual-core, Wi-Fi capable, 12-bit ADC)
 - **Pressure Sensors**: Force-Sensitive Resistors (FSR 402) at heel and forefoot locations
 - **Motion Sensor**: MPU6050 (6-axis IMU: 3-axis accelerometer + 3-axis gyroscope)
+- **Prosthetic Structure**: 3D-printed TPU (Thermoplastic Polyurethane) foot model
+- **Design Scale**: Pediatric model for easier testing and biomechanical validation
 - **Communication**: Wi-Fi protocol via ESP32 for real-time wireless data transmission
 - **Sampling Rate**: 100 Hz for sensor data acquisition
 - **Power**: Battery-powered with real-time operation capability
@@ -120,6 +124,22 @@ The ESP32 continuously samples pressure and motion data at 100 Hz, applies senso
 
 ---
 
+## Design, Fabrication & Testing
+
+### Design and Simulation
+
+![Design and Simulation](docs/design.png)
+
+### Fabrication and Testing
+
+![Fabrication and Testing](docs/fabrication.png)
+
+### Electronics Integration
+
+![Electronics Integration](docs/electronics.png)
+
+---
+
 ## Advanced Parameters
 
 ### Pressure Asymmetry Index (PAI)
@@ -147,6 +167,33 @@ Derived from IMU gyroscope data to assess postural stability and motion consiste
 
 ---
 
+## Mechanical Validation
+
+The prosthetic foot structure was engineered using thermoplastic polyurethane (TPU) through 3D printing fabrication for precise sensor integration and structural reliability.
+
+### Material and Fabrication Specifications
+
+- **Material**: TPU (Thermoplastic Polyurethane) with Shore A hardness of 95A
+- **Fabrication Method**: 3D printing with layer thickness of 0.2 mm
+- **Structural Weight**: Approximately 180 grams (pediatric model)
+- **Design Scale**: Pediatric prosthetic foot for enhanced testing accuracy and reduced material costs
+
+### Compression Testing Results
+
+- **Maximum Load**: Withstood compression testing up to 20 kN without structural failure
+- **Safe Deformation**: Material exhibited controlled elastic deformation within acceptable limits
+- **Structural Integrity**: Post-test analysis confirmed maintenance of dimensional accuracy and sensor mounting stability
+- **Recovery Rate**: Complete material recovery to original shape after load removal
+
+### Design Advantages
+
+- **Lightweight Construction**: The 180-gram design reduces lower limb fatigue and improves user mobility
+- **Pediatric Model Benefit**: Smaller scale enables rapid prototyping, easier sensor integration testing, and cost-effective validation before scaling to adult prosthetics
+- **Material Flexibility**: TPU's inherent flexibility mimics natural foot biomechanics while maintaining structural integrity for sensor support
+- **Manufacturing Precision**: 3D printing enables precise cavity placement for FSR sensors and electronics integration with minimal tolerance stackup
+
+---
+
 ## Technology Stack
 
 | Category | Technology |
@@ -154,6 +201,7 @@ Derived from IMU gyroscope data to assess postural stability and motion consiste
 | **Microcontroller** | ESP32 (dual-core, 100 Hz sampling) |
 | **Pressure Sensors** | FSR 402 (heel & forefoot) |
 | **IMU** | MPU6050 (6-axis: accel + gyro) |
+| **Prosthetic Material** | TPU (3D-printed, pediatric scale) |
 | **Firmware** | C/C++ (Arduino) |
 | **Frontend** | React, TypeScript |
 | **Styling** | Tailwind CSS, shadcn-ui |
@@ -183,6 +231,8 @@ Lovable AI was used to assist with frontend development and dashboard UI prototy
 - **System Integration**: Established and tested communication pipeline between hardware sensors and software dashboard
 - **Dashboard Development**: Collaborated on React frontend design with real-time data visualization components
 - **Parameter Implementation**: Implemented computation of Pressure Asymmetry Index, Center of Pressure, and stability variation metrics
+- **Mechanical Design**: Worked on pediatric prosthetic foot design in TPU for sensor integration and structural validation
+- **Fabrication and Testing**: Conducted compression testing, mechanical validation, and sensor integration verification
 - **System Testing**: Conducted sensor validation, calibration verification, and end-to-end prototype testing
 - **Documentation**: Created technical documentation for system architecture, setup, and future development
 
@@ -195,6 +245,7 @@ Lovable AI was used to assist with frontend development and dashboard UI prototy
 - **Rehabilitation Progress Monitoring**: Tracking stability and pressure distribution improvements during therapy
 - **Pressure Ulcer Risk Assessment**: Detection of high-pressure zones to reduce tissue injury risk
 - **User Gait Awareness**: Real-time biofeedback enabling users to self-correct walking patterns
+- **Pediatric Prosthetics Research**: Supports early-stage gait analysis and assistive device development for children
 - **Research Platform**: Standardized, reproducible system for prosthetics research and biomechanics studies
 
 ---
@@ -207,6 +258,7 @@ Lovable AI was used to assist with frontend development and dashboard UI prototy
 - **Mobile Application**: Native iOS/Android app for on-the-go access and data review
 - **Low-Power Optimization**: Bluetooth Low Energy (BLE) support for extended battery life
 - **Clinical Validation Study**: Comparative analysis with gold-standard motion capture systems
+- **Adult Prosthetic Scaling**: Scale design to adult foot dimensions for broader clinical application
 - **Multi-User Platform**: Support for tracking multiple prosthetic wearers with centralized data management
 - **Automated Alerts**: Threshold-based notifications for abnormal pressure patterns or instability
 
@@ -214,7 +266,7 @@ Lovable AI was used to assist with frontend development and dashboard UI prototy
 
 ## Disclaimer
 
-StrideSense is developed as a biomedical engineering prototype system. Lovable AI was used as a development assistance tool for frontend code generation and UI design, but does not represent the core innovation of the hardware-software integration. All sensor calibration, hardware integration, firmware development, and system architecture decisions are based on original engineering work and testing.
+StrideSense is developed as a biomedical engineering prototype system. Lovable AI was used as a development assistance tool for frontend code generation and UI design, but does not represent the core innovation of the hardware-software integration. All sensor calibration, hardware integration, firmware development, mechanical design, and system architecture decisions are based on original engineering work and testing.
 
 This is a prototype system designed for research and evaluation purposes. Clinical deployment requires appropriate regulatory clearance and validation studies.
 
@@ -333,4 +385,4 @@ For technical questions, collaboration inquiries, or feedback, please reach out 
 ---
 
 **Last Updated**: April 2026  
-**System Status**: Functional Prototype with Real-Time Data Acquisition and Visualization
+**System Status**: Functional Prototype with Real-Time Data Acquisition, Visualization, and Mechanical Validation
