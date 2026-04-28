@@ -14,30 +14,11 @@ The system has been implemented and tested as a working prototype with real-time
 
 ---
 
-## Problem Statement
+## Why StrideSense?
 
-Traditional prosthetic limbs lack real-time feedback on plantar pressure distribution and gait kinematics, limiting:
+Traditional prosthetic systems lack real-time feedback on pressure distribution and gait dynamics, relying on expensive lab-based assessments and periodic clinical observation. This limits continuous monitoring and delays detection of instability or harmful loading patterns.
 
-- Clinical assessment of load distribution patterns and asymmetry
-- User awareness of gait abnormalities and instability
-- Optimization of prosthetic fitting and training protocols
-- Prevention of pressure-related tissue damage through early warning
-
-Current solutions either rely on external motion capture systems (expensive, lab-bound) or provide no biomechanical feedback to users in real-time.
-
----
-
-## Proposed Solution
-
-StrideSense is a working prototype system that embeds sensors directly into a prosthetic foot to provide:
-
-- **Real-time pressure mapping** across heel and forefoot regions using calibrated FSR sensors
-- **Motion tracking** via 6-axis IMU for orientation sensing (pitch and roll angles)
-- **Stability analysis** through continuous motion variation monitoring
-- **Wireless data streaming** enabling portable, wearable operation
-- **Visual analytics dashboard** for clinicians and users to monitor gait quality in real time
-
-The system operates independently and integrates seamlessly with standard prosthetic designs for clinical and personal use.
+StrideSense overcomes this by embedding sensors within the prosthetic foot to capture real-time pressure and motion data. With wireless transmission and live dashboard visualization, it enables continuous, accessible, and data-driven gait monitoring in everyday environments.
 
 ---
 
