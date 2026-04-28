@@ -164,13 +164,15 @@ The prosthetic foot structure was engineered using thermoplastic polyurethane (T
 | Category | Technology |
 |----------|-----------|
 | **Microcontroller** | ESP32 (dual-core, 100 Hz sampling) |
-| **Pressure Sensors** | FSR 402 (heel & forefoot) |
+| **Pressure Sensors** | FSR 406 (heel & forefoot) |
 | **IMU** | MPU6050 (6-axis: accel + gyro) |
 | **Prosthetic Material** | TPU (3D-printed, pediatric scale) |
-| **Firmware** | C/C++ (Arduino) |
+| **Firmware** | C/C++ (Arduino, PlatformIO - VS Code) |
 | **Frontend** | React, TypeScript |
 | **Styling** | Tailwind CSS, shadcn-ui |
 | **Build System** | Vite |
+| **Backend** | Supabase |
+| **Simulation & Analysis** | ANSYS (FEA for structural validation) |
 | **Communication** | Wi-Fi (TCP/UDP) |
 
 ---
