@@ -76,15 +76,18 @@ FSR + IMU → ESP32 → Wi-Fi → Supabase → React Dashboard → Visualization
 
 ---
 
-## Sample Output
+## Dashboard Visualization
 
-### Real-Time Pressure and Motion Visualization
+<div style="display:flex; overflow-x:auto; gap:12px; padding:10px 0;">
 
-![Pressure Distribution and IMU Output](docs/output.png)
+  <img src="docs/dashboard1.png" width="300"/>
+  <img src="docs/dashboard2.png" width="300"/>
+  <img src="docs/dashboard3.png" width="300"/>
+  <img src="docs/dashboard4.png" width="300"/>
+  <img src="docs/dashboard5.png" width="300"/>
+  <img src="docs/dashboard6.png" width="300"/>
 
-### User Dashboard Interface
-
-![Dashboard UI](docs/ui.png)
+</div>
 
 ---
 
