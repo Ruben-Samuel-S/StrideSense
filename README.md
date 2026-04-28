@@ -92,7 +92,7 @@ FSR + IMU → ESP32 → Wi-Fi → Supabase → React Dashboard → Visualization
 
 ### Design and Simulation
 
-![Design and Simulation](docs/DesignandSimulation.png)
+![Design and Simulation](docs/Design_and_Simulation.png)
 
 ### Fabrication and Testing
 
