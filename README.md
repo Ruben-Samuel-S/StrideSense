@@ -1,6 +1,6 @@
 # StrideSense
 
-**Smart Prosthetic Foot with Real-Time Gait Analysis and Pressure Monitoring**
+**Smart 3D Printed Prosthetic Foot with Real-Time Gait Analysis and Pressure Monitoring**
 
 ---
 
