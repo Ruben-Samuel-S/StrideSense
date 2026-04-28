@@ -1,4 +1,5 @@
-# Welcome to your Lovable project
+#  StrideSense  
+### Smart Prosthetic Foot with Pressure & Force Monitoring for Gait Analysis  
 
 ## Project info
 
