@@ -24,43 +24,30 @@ StrideSense overcomes this by embedding sensors within the prosthetic foot to ca
 
 ## System Architecture
 
-### Hardware Components
+![System Architecture](docs/architecture.png)
 
-- **Microcontroller**: ESP32 (dual-core, Wi-Fi capable, 12-bit ADC)
-- **Pressure Sensors**: Force-Sensitive Resistors (FSR 402) at heel and forefoot locations
-- **Motion Sensor**: MPU6050 (6-axis IMU: 3-axis accelerometer + 3-axis gyroscope)
-- **Prosthetic Structure**: 3D-printed TPU (Thermoplastic Polyurethane) foot model
-- **Design Scale**: Pediatric model for easier testing and biomechanical validation
-- **Communication**: Wi-Fi protocol via ESP32 for real-time wireless data transmission
-- **Sampling Rate**: 100 Hz for sensor data acquisition
-- **Power**: Battery-powered with real-time operation capability
+### Hardware Components
+- ESP32 microcontroller (data acquisition & transmission)
+- FSR sensors (heel & forefoot pressure)
+- MPU6050 IMU (pitch & roll tracking)
+- 3D-printed TPU prosthetic foot (pediatric model)
 
 ### Software Stack
-
-- **Embedded Firmware**: C/C++ (Arduino framework on ESP32)
-- **Data Acquisition**: Real-time sensor polling, calibration, and ADC conversion
-- **Frontend Dashboard**: React + TypeScript for interactive real-time visualization
-- **UI Framework**: Tailwind CSS + shadcn-ui for responsive design
-- **Build Tool**: Vite for optimized development and production builds
+- Embedded C/C++ (ESP32 firmware)
+- React + TypeScript dashboard
+- Tailwind CSS (UI)
+- Supabase (backend database & cloud storage)
 
 ### Data Flow
-
-```
-[FSR Sensors] ─┐
-              ├─→ [ESP32] ──→ [Wi-Fi] ──→ [React Dashboard]
-[MPU6050 IMU] ─┘                    (Real-time Visualization)
-```
-
-The ESP32 continuously samples pressure and motion data at 100 Hz, applies sensor calibration and filtering, and transmits processed data to the web dashboard. The dashboard renders real-time pressure maps, orientation plots, stability metrics, and clinical indicators with minimal latency.
+FSR + IMU → ESP32 → Wi-Fi → Supabase → React Dashboard → Visualization
 
 ### System Workflow
-
-1. **Sensor Acquisition**: ESP32 reads FSR analog values (heel & forefoot pressure) and MPU6050 acceleration/gyroscope data at 100 Hz
-2. **Sensor Calibration**: Applied calibration offsets for accurate pressure measurement; gyroscope bias correction
-3. **Data Processing**: Real-time filtering and computation of derived metrics (pitch, roll, stability variation, pressure asymmetry)
-4. **Wireless Transmission**: Processed data streamed via Wi-Fi to the React dashboard application
-5. **Real-Time Visualization**: Dashboard displays pressure heatmaps, IMU orientation, stability indicators, and clinical metrics
-6. **Clinical Analysis**: Pressure Asymmetry Index (PAI), Center of Pressure (COP), and stability variation metrics calculated and displayed
+1. Sensor data acquisition (pressure + motion)
+2. Calibration and filtering
+3. Real-time processing (PAI, COP, stability)
+4. Data transmission to backend (Supabase)
+5. Storage and retrieval of gait data
+6. Visualization on dashboard
 
 ---
 
