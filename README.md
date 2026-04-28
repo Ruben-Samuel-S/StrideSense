@@ -189,43 +189,23 @@ Lovable AI was used to assist with frontend development and dashboard UI prototy
 
 ---
 
-## My Contributions
-
-- **Hardware Integration**: Selected, integrated, and calibrated FSR and MPU6050 sensors for accurate real-time measurements
-- **ESP32 Firmware Development**: Worked on sensor data acquisition, calibration routines, and wireless communication protocols
-- **System Integration**: Established and tested communication pipeline between hardware sensors and software dashboard
-- **Dashboard Development**: Collaborated on React frontend design with real-time data visualization components
-- **Parameter Implementation**: Implemented computation of Pressure Asymmetry Index, Center of Pressure, and stability variation metrics
-- **Mechanical Design**: Worked on pediatric prosthetic foot design in TPU for sensor integration and structural validation
-- **Fabrication and Testing**: Conducted compression testing, mechanical validation, and sensor integration verification
-- **System Testing**: Conducted sensor validation, calibration verification, and end-to-end prototype testing
-- **Documentation**: Created technical documentation for system architecture, setup, and future development
-
----
-
 ## Biomedical Applications
 
-- **Clinical Gait Assessment**: Non-invasive evaluation of prosthetic user gait patterns in real time
-- **Prosthetic Fitting Optimization**: Real-time feedback for clinicians during device adjustment and alignment
-- **Rehabilitation Progress Monitoring**: Tracking stability and pressure distribution improvements during therapy
-- **Pressure Ulcer Risk Assessment**: Detection of high-pressure zones to reduce tissue injury risk
-- **User Gait Awareness**: Real-time biofeedback enabling users to self-correct walking patterns
-- **Pediatric Prosthetics Research**: Supports early-stage gait analysis and assistive device development for children
-- **Research Platform**: Standardized, reproducible system for prosthetics research and biomechanics studies
+- Real-time gait assessment for prosthetic users  
+- Rehabilitation monitoring and progress tracking  
+- Pressure ulcer risk detection  
+- Biofeedback for gait improvement  
+- Pediatric prosthetics research  
 
 ---
 
 ## Future Scope
 
-- **Machine Learning Integration**: Implement gait phase classification and personalized pattern recognition
-- **Extended Sensor Coverage**: Additional pressure sensors for higher-resolution plantar mapping
-- **Long-Term Data Analytics**: Historical trend analysis and regression tracking for rehabilitation assessment
-- **Mobile Application**: Native iOS/Android app for on-the-go access and data review
-- **Low-Power Optimization**: Bluetooth Low Energy (BLE) support for extended battery life
-- **Clinical Validation Study**: Comparative analysis with gold-standard motion capture systems
-- **Adult Prosthetic Scaling**: Scale design to adult foot dimensions for broader clinical application
-- **Multi-User Platform**: Support for tracking multiple prosthetic wearers with centralized data management
-- **Automated Alerts**: Threshold-based notifications for abnormal pressure patterns or instability
+- Integration of machine learning for gait classification  
+- Higher-resolution pressure sensing  
+- Mobile application development  
+- Clinical validation with real-world data  
+- Scaling to adult prosthetic designs  
 
 ---
 
